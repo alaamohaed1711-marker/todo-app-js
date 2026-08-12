@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تطبيق المهام - All In One</title>
+    
+    <!-- الـ CSS هنا كله -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', 'Segoe UI', Tahoma, sans-serif;
+        }
+
+        body {
+            background-color: #0f0f1a;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #00d2ff;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        input {
+            flex: 1;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 16px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #00d2ff;
+        }
+
+        button {
+            padding: 15px 25px;
+            background: #00d2ff;
+            color: #0f0f1a;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #00a8cc;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border-right: 3px solid #00d2ff;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        li:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        li.done {
+            opacity: 0.5;
+            text-decoration: line-through;
+            border-right-color: #555;
+        }
+
+        .delete-btn {
+            background: #ff4757;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+
+        .delete-btn:hover {
+            background: #ff2e43;
+        }
+
+        .empty-msg {
+            text-align: center;
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- الـ HTML هنا -->
+    <div class="container">
+        <h1>مهامي 📝</h1>
+        
+        <div class="input-group">
+            <input type="text" id="todo-input" placeholder="اكتب مهمة جديدة...">
+            <button id="add-btn">إضافة</button>
+        </div>
+
+        <ul id="todo-list"></ul>
+        <p class="empty-msg" id="empty-msg">لا توجد مهام حالياً، أضف مهمة جديدة!</p>
+    </div>
+
+    <!-- الـ JavaScript هنا كله -->
+    <script>
+        const input = document.getElementById('todo-input');
+        const addBtn = document.getElementById('add-btn');
+        const list = document.getElementById('todo-list');
+        const emptyMsg = document.getElementById('empty-msg');
+
+        addBtn.addEventListener('click', addTask);
+
+        input.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addTask();
+            }
+        });
+
+        function addTask() {
+            const text = input.value.trim();
+            
+            if (text !== '') {
+                emptyMsg.classList.add('hidden');
+                
+                const li = document.createElement('li');
+                li.textContent = text;
+                
+                li.addEventListener('click', function() {
+                    this.classList.toggle('done');
+                });
+                
+                const deleteBtn = document.createElement('button');
+                deleteBtn.textContent = 'حذف';
+                deleteBtn.className = 'delete-btn';
+                
+                deleteBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    li.remove();
+                    if (list.children.length === 0) {
+                        emptyMsg.classList.remove('hidden');
+                    }
+                });
+                
+                li.appendChild(deleteBtn);
+                list.appendChild(li);
+                input.value = '';
+            }
+        }
+    </script>
+</body>
+</html>
